@@ -1,7 +1,21 @@
-canvas {
-    width: 45%;
-    height: 745px;
-    background-color: green;
+body {
     display: flex;
-    
+    justify-content: center;
+    background-color: black;
+}
+
+.gameArea {
+    width: 800px;
+    height: 800px;
+    border: solid white 2px;
+}
+
+.snake-head {
+    background-color: green;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    color: green;
+    border-radius: 5px;
+    position: relative;
 }
