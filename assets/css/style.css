@@ -4,6 +4,12 @@ body {
     background-color: black;
 }
 
+p {
+    color: white;
+    padding-left: 10px;
+    font-size: larger;
+}
+
 .gameArea {
     width: 800px;
     height: 800px;
@@ -20,4 +26,24 @@ body {
     color: green;
     border-radius: 5px;
     position: relative;
+}
+
+#pomme {
+    width: 35px;
+    height: 35px;
+    background-color: red;
+    color: red;
+    border-radius: 100px;
+    position: relative;
+}
+
+button {
+    height: 50px;
+    position: relative;
+    top:70px;
+    right: 75px;
+    margin-left: 10px;
+    color: white;
+    background-color: black;
+    border-color: aquamarine;
 }

@@ -1,4 +1,4 @@
-// <div class="snake-body">.</div>
+let i = 0;
 
 function moveUp() {
     let snakeHead = document.querySelector(".snake-head");
@@ -40,20 +40,26 @@ function moveRight() {
     }
 }
 
-let snakeDirection = "right"; 
-let gameInterval; 
+let snakeDirection = "right";
+let gameInterval;
 
 function startGame() {
-    gameInterval = setInterval(moveSnake, 100); 
+    gameInterval = setInterval(moveSnake, 100);
+    setInterval(function () {
+        if (detectCollision()) {
+            console.log("Collision détectée !");
+        }
+    }, 100);
 }
 
 
 function stopGame() {
     clearInterval(gameInterval);
+    document.querySelector('.snake-head').style.left = '385px';
+    document.querySelector('.snake-head').style.top = '385px';
 }
 
 function moveSnake() {
-
     switch (snakeDirection) {
         case "right":
             moveRight();
@@ -69,7 +75,10 @@ function moveSnake() {
             break;
     }
 
-
+    let snakeHead = document.querySelector(".snake-head");
+    let currentPosition = snakeHead.getBoundingClientRect();
+    let gameArea = document.querySelector(".gameArea").getBoundingClientRect();
+ 
 }
 
 
@@ -100,8 +109,46 @@ function handleDirectionChange(event) {
     }
 }
 
+function appleRandomSpawn() {
+    let applePosY = Math.floor(Math.random() * (715 - (-35) + 1)) + (-35);
+    let applePosX = Math.floor(Math.random() * (750 - 5 + 1)) + 5;
+    document.getElementById('pomme').style.top = applePosY + "px";
+    document.getElementById('pomme').style.left = applePosX + "px";
+}
+
+function scoreIncrement() {
+    i++
+    document.querySelector('#score').textContent = i;
+}
+
+function detectCollision() {
+    let snakeHead = document.querySelector(".snake-head").getBoundingClientRect();
+    let apple = document.getElementById("pomme").getBoundingClientRect();
+
+    if (
+        snakeHead.left < apple.right &&
+        snakeHead.right > apple.left &&
+        snakeHead.top < apple.bottom &&
+        snakeHead.bottom > apple.top
+    ) {
+
+        appleRandomSpawn()
+        scoreIncrement()
+        return true;
+
+    } else {
+
+        return false;
+
+    }
+}
+
 document.addEventListener("keydown", handleDirectionChange);
 
-document.addEventListener("DOMContentLoaded", function() {
+document.getElementById('launch').addEventListener("click", function () {
     startGame();
+});
+
+document.getElementById('stop').addEventListener("click", function () {
+    stopGame();
 });
