@@ -100,23 +100,13 @@ function handleDirectionChange(event) {
 
 function addSnakeBody() {
     let snakeHead = document.querySelector(".snake-head");
+
     let newBodySegment = document.createElement("div");
     newBodySegment.classList.add("snake-body");
-    snakeSegments.push(newBodySegment); // Ajouter le nouveau segment à la liste des segments
 
-    // Positionner le nouveau segment juste derrière la tête du serpent en fonction de sa direction actuelle
-    let snakeDirectionVector = getSnakeDirectionVector();
-    let lastSegment = snakeSegments.length > 1 ? snakeSegments[snakeSegments.length - 2] : snakeHead;
+    newBodySegment.style.bottom = "-20px"
 
-    let newSegmentPosition = {
-        top: lastSegment.offsetTop + snakeDirectionVector.y * 20,
-        left: lastSegment.offsetLeft + snakeDirectionVector.x * 20
-    };
-
-    newBodySegment.style.top = newSegmentPosition.top + "px";
-    newBodySegment.style.left = newSegmentPosition.left + "px";
-
-    document.querySelector(".gameArea").appendChild(newBodySegment); // Ajouter le nouveau segment au DOM
+    snakeHead.appendChild(newBodySegment)
 }
 
 function getSnakeDirectionVector() {
