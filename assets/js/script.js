@@ -1,7 +1,9 @@
 let i = 0;
+let snakeDirection = "right";
+let gameInterval;
+let snakeSegments = []; // tableau pour stocker les segments du corps du serpent
 
-function moveUp() {
-    let snakeHead = document.querySelector(".snake-head");
+function moveUp(snakeHead) {
     let currentPosition = parseFloat(getComputedStyle(snakeHead).top);
     let newPosition = currentPosition - 20;
     if (newPosition >= 0) {
@@ -9,8 +11,7 @@ function moveUp() {
     }
 }
 
-function moveDown() {
-    let snakeHead = document.querySelector(".snake-head");
+function moveDown(snakeHead) {
     let currentPosition = parseFloat(getComputedStyle(snakeHead).top);
     let newPosition = currentPosition + 20;
     let gameAreaHeight = parseFloat(getComputedStyle(document.querySelector(".gameArea")).height);
@@ -20,8 +21,7 @@ function moveDown() {
     }
 }
 
-function moveLeft() {
-    let snakeHead = document.querySelector(".snake-head");
+function moveLeft(snakeHead) {
     let currentPosition = parseFloat(getComputedStyle(snakeHead).left);
     let newPosition = currentPosition - 20;
     if (newPosition >= 0) {
@@ -29,8 +29,7 @@ function moveLeft() {
     }
 }
 
-function moveRight() {
-    let snakeHead = document.querySelector(".snake-head");
+function moveRight(snakeHead) {
     let currentPosition = parseFloat(getComputedStyle(snakeHead).left);
     let newPosition = currentPosition + 20;
     let gameAreaWidth = parseFloat(getComputedStyle(document.querySelector(".gameArea")).width);
@@ -40,50 +39,40 @@ function moveRight() {
     }
 }
 
-let snakeDirection = "right";
-let gameInterval;
-
-function startGame() {
-    gameInterval = setInterval(moveSnake, 100);
-    setInterval(function () {
-        if (detectCollision()) {
-            console.log("Collision détectée !");
-        }
-    }, 100);
-}
-
-
-function stopGame() {
-    clearInterval(gameInterval);
-    document.querySelector('.snake-head').style.left = '385px';
-    document.querySelector('.snake-head').style.top = '385px';
-}
-
 function moveSnake() {
+    let snakeHead = document.querySelector(".snake-head");
     switch (snakeDirection) {
         case "right":
-            moveRight();
+            moveRight(snakeHead);
             break;
         case "left":
-            moveLeft();
+            moveLeft(snakeHead);
             break;
         case "up":
-            moveUp();
+            moveUp(snakeHead);
             break;
         case "down":
-            moveDown();
+            moveDown(snakeHead);
             break;
     }
 
-    let snakeHead = document.querySelector(".snake-head");
-    let currentPosition = snakeHead.getBoundingClientRect();
-    let gameArea = document.querySelector(".gameArea").getBoundingClientRect();
- 
+    // Déplacer les segments du corps du serpent
+    for (let i = snakeSegments.length - 1; i > 0; i--) {
+        let currentSegment = snakeSegments[i];
+        let previousSegment = snakeSegments[i - 1];
+        currentSegment.style.top = previousSegment.offsetTop + "px";
+        currentSegment.style.left = previousSegment.offsetLeft + "px";
+    }
+
+    // Déplacer le premier segment juste derrière la tête du serpent
+    if (snakeSegments.length > 0) {
+        let firstSegment = snakeSegments[0];
+        firstSegment.style.top = snakeHead.offsetTop + "px";
+        firstSegment.style.left = snakeHead.offsetLeft + "px";
+    }
 }
 
-
 function changeDirection(newDirection) {
-
     if ((newDirection === "right" && snakeDirection !== "left") ||
         (newDirection === "left" && snakeDirection !== "right") ||
         (newDirection === "up" && snakeDirection !== "down") ||
@@ -109,6 +98,40 @@ function handleDirectionChange(event) {
     }
 }
 
+function addSnakeBody() {
+    let snakeHead = document.querySelector(".snake-head");
+    let newBodySegment = document.createElement("div");
+    newBodySegment.classList.add("snake-body");
+    snakeSegments.push(newBodySegment); // Ajouter le nouveau segment à la liste des segments
+
+    // Positionner le nouveau segment juste derrière la tête du serpent en fonction de sa direction actuelle
+    let snakeDirectionVector = getSnakeDirectionVector();
+    let lastSegment = snakeSegments.length > 1 ? snakeSegments[snakeSegments.length - 2] : snakeHead;
+
+    let newSegmentPosition = {
+        top: lastSegment.offsetTop + snakeDirectionVector.y * 20,
+        left: lastSegment.offsetLeft + snakeDirectionVector.x * 20
+    };
+
+    newBodySegment.style.top = newSegmentPosition.top + "px";
+    newBodySegment.style.left = newSegmentPosition.left + "px";
+
+    document.querySelector(".gameArea").appendChild(newBodySegment); // Ajouter le nouveau segment au DOM
+}
+
+function getSnakeDirectionVector() {
+    switch (snakeDirection) {
+        case "right":
+            return { x: 1, y: 0 };
+        case "left":
+            return { x: -1, y: 0 };
+        case "up":
+            return { x: 0, y: -1 };
+        case "down":
+            return { x: 0, y: 1 };
+    }
+}
+
 function appleRandomSpawn() {
     let applePosY = Math.floor(Math.random() * (715 - (-35) + 1)) + (-35);
     let applePosX = Math.floor(Math.random() * (750 - 5 + 1)) + 5;
@@ -131,16 +154,40 @@ function detectCollision() {
         snakeHead.top < apple.bottom &&
         snakeHead.bottom > apple.top
     ) {
-
-        appleRandomSpawn()
-        scoreIncrement()
+        // Le serpent a mangé la pomme
+        appleRandomSpawn();
+        scoreIncrement();
+        addSnakeBody(); // Ajouter un nouveau segment de corps
         return true;
-
     } else {
-
         return false;
-
     }
+}
+
+function startGame() {
+    gameInterval = setInterval(function () {
+        moveSnake();
+        if (detectCollision()) {
+            console.log("Collision détectée !");
+        }
+    }, 100);
+}
+
+function clearSnakeBody() {
+    // Supprimer tous les segments du corps du serpent du DOM
+    for (let segment of snakeSegments) {
+        segment.remove();
+    }
+
+    // Vider le tableau des segments du corps du serpent
+    snakeSegments = [];
+}
+
+function stopGame() {
+    clearInterval(gameInterval);
+    clearSnakeBody()
+    document.querySelector('.snake-head').style.left = '385px';
+    document.querySelector('.snake-head').style.top = '385px';
 }
 
 document.addEventListener("keydown", handleDirectionChange);
@@ -152,3 +199,5 @@ document.getElementById('launch').addEventListener("click", function () {
 document.getElementById('stop').addEventListener("click", function () {
     stopGame();
 });
+
+document.addEventListener("DOMContentLoaded", appleRandomSpawn());

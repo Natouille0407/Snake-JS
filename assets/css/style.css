@@ -28,6 +28,16 @@ p {
     position: relative;
 }
 
+.snake-body {
+    background-color: red;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    color: red;
+    border-radius: 5px;
+    position: relative;
+}
+
 #pomme {
     width: 35px;
     height: 35px;
