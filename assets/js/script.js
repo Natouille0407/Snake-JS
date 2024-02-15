@@ -1,42 +1,26 @@
-let i = 0;
 let snakeDirection = "right";
+let i = 0;
 let gameInterval;
-let snakeSegments = []; // tableau pour stocker les segments du corps du serpent
+let snakeSegments = [];
 
 function moveUp(snakeHead) {
     let currentPosition = parseFloat(getComputedStyle(snakeHead).top);
-    let newPosition = currentPosition - 20;
-    if (newPosition >= 0) {
-        snakeHead.style.top = newPosition + "px";
-    }
+    snakeHead.style.top = currentPosition - 20 + "px";
 }
 
 function moveDown(snakeHead) {
     let currentPosition = parseFloat(getComputedStyle(snakeHead).top);
-    let newPosition = currentPosition + 20;
-    let gameAreaHeight = parseFloat(getComputedStyle(document.querySelector(".gameArea")).height);
-    let snakeHeight = parseFloat(getComputedStyle(snakeHead).height);
-    if (newPosition + snakeHeight <= gameAreaHeight) {
-        snakeHead.style.top = newPosition + "px";
-    }
+    snakeHead.style.top = currentPosition + 20 + "px";
 }
 
 function moveLeft(snakeHead) {
     let currentPosition = parseFloat(getComputedStyle(snakeHead).left);
-    let newPosition = currentPosition - 20;
-    if (newPosition >= 0) {
-        snakeHead.style.left = newPosition + "px";
-    }
+    snakeHead.style.left = currentPosition - 20 + "px";
 }
 
 function moveRight(snakeHead) {
     let currentPosition = parseFloat(getComputedStyle(snakeHead).left);
-    let newPosition = currentPosition + 20;
-    let gameAreaWidth = parseFloat(getComputedStyle(document.querySelector(".gameArea")).width);
-    let snakeWidth = parseFloat(getComputedStyle(snakeHead).width);
-    if (newPosition + snakeWidth <= gameAreaWidth) {
-        snakeHead.style.left = newPosition + "px";
-    }
+    snakeHead.style.left = currentPosition + 20 + "px";
 }
 
 function moveSnake() {
@@ -56,7 +40,6 @@ function moveSnake() {
             break;
     }
 
-    // Déplacer les segments du corps du serpent
     for (let i = snakeSegments.length - 1; i > 0; i--) {
         let currentSegment = snakeSegments[i];
         let previousSegment = snakeSegments[i - 1];
@@ -64,7 +47,6 @@ function moveSnake() {
         currentSegment.style.left = previousSegment.offsetLeft + "px";
     }
 
-    // Déplacer le premier segment juste derrière la tête du serpent
     if (snakeSegments.length > 0) {
         let firstSegment = snakeSegments[0];
         firstSegment.style.top = snakeHead.offsetTop + "px";
@@ -73,12 +55,7 @@ function moveSnake() {
 }
 
 function changeDirection(newDirection) {
-    if ((newDirection === "right" && snakeDirection !== "left") ||
-        (newDirection === "left" && snakeDirection !== "right") ||
-        (newDirection === "up" && snakeDirection !== "down") ||
-        (newDirection === "down" && snakeDirection !== "up")) {
-        snakeDirection = newDirection;
-    }
+    snakeDirection = newDirection;
 }
 
 function handleDirectionChange(event) {
@@ -95,30 +72,6 @@ function handleDirectionChange(event) {
         case "ArrowRight":
             changeDirection("right");
             break;
-    }
-}
-
-function addSnakeBody() {
-    let snakeHead = document.querySelector(".snake-head");
-
-    let newBodySegment = document.createElement("div");
-    newBodySegment.classList.add("snake-body");
-
-    newBodySegment.style.bottom = "-20px"
-
-    snakeHead.appendChild(newBodySegment)
-}
-
-function getSnakeDirectionVector() {
-    switch (snakeDirection) {
-        case "right":
-            return { x: 1, y: 0 };
-        case "left":
-            return { x: -1, y: 0 };
-        case "up":
-            return { x: 0, y: -1 };
-        case "down":
-            return { x: 0, y: 1 };
     }
 }
 
@@ -144,10 +97,8 @@ function detectCollision() {
         snakeHead.top < apple.bottom &&
         snakeHead.bottom > apple.top
     ) {
-        // Le serpent a mangé la pomme
         appleRandomSpawn();
-        scoreIncrement();
-        addSnakeBody(); // Ajouter un nouveau segment de corps
+        scoreIncrement()
         return true;
     } else {
         return false;
@@ -163,17 +114,8 @@ function startGame() {
     }, 100);
 }
 
-function clearSnakeBody() {
-
-    for (let segment of snakeSegments) {
-        segment.remove();
-    }
-    snakeSegments = [];
-}
-
 function stopGame() {
     clearInterval(gameInterval);
-    clearSnakeBody()
     document.querySelector('.snake-head').style.left = '385px';
     document.querySelector('.snake-head').style.top = '385px';
 }
