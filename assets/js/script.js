@@ -164,12 +164,10 @@ function startGame() {
 }
 
 function clearSnakeBody() {
-    // Supprimer tous les segments du corps du serpent du DOM
+
     for (let segment of snakeSegments) {
         segment.remove();
     }
-
-    // Vider le tableau des segments du corps du serpent
     snakeSegments = [];
 }
 
