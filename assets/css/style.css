@@ -28,7 +28,7 @@ p {
     position: relative;
 }
 
-.snake-body {
+.wall {
     background-color: red;
     width: 40px;
     height: 40px;
@@ -57,3 +57,4 @@ button {
     background-color: black;
     border-color: aquamarine;
 }
+
