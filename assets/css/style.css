@@ -1,35 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Sixtyfour&display=swap');
+
 body {
     display: flex;
     justify-content: center;
     background-color: black;
+    font-family: "Pixelify Sans", sans-serif;
 }
 
 p {
     color: white;
-    padding-left: 10px;
-    font-size: larger;
+    padding-left: 30px;
+    font-size: 30px;
 }
 
 .gameArea {
     width: 800px;
     height: 800px;
     border: solid white 2px;
+    position:relative;
 }
 
 .snake-head {
-    background-color: green;
+    background-image: url(../image/player.png);
+    background-size: contain;
     width: 40px;
     height: 40px;
     left:385px;
     top:385px;
     text-align: center;
-    color: green;
-    border-radius: 5px;
-    position: relative;
+    color: lime;
+    border-radius: 15px;
+    position: absolute;
 }
 
 .wall {
-    background-color: red;
+    background-image: url(../image/Brick.png);
+    background-size: cover;
     width: 40px;
     height: 40px;
     text-align: center;
@@ -39,22 +45,46 @@ p {
 }
 
 #pomme {
-    width: 35px;
-    height: 35px;
-    background-color: red;
+    width: 45px;
+    height: 45px;
+    background-image: url(../image/apple.png);
+    background-size:100%;
+    text-align: center;
     color: red;
     border-radius: 100px;
-    position: relative;
+    position: absolute;
 }
 
 button {
     height: 50px;
     position: relative;
-    top:70px;
-    right: 75px;
+    top:75px;
+    right: 165px;
     margin-left: 10px;
     color: white;
     background-color: black;
     border-color: aquamarine;
+    transition:0.5s;
 }
 
+button:hover {
+    height: 60px;
+    transition:0.5s;
+    border-color:red;
+}
+
+h1 {
+    color: white;
+    position: relative;
+    right:150px;
+    font-size: 60px;
+    color: aqua;
+    transition: 0.5s;
+    display: inline;
+}
+
+h1:hover {
+    color: red;
+    font-size: 65px;
+    transition:0.5s;
+}
