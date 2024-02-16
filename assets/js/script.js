@@ -88,7 +88,10 @@ function wallRandomSpawn() {
     let wallPosX = Math.floor(Math.random() * (750 - 5 + 1)) + 5;
     let wall = document.createElement('div');
     gamearea.appendChild(wall);
-    wall.classList.add('wall')
+    wall.classList.add('wall');
+
+    wall.style.top = wallPosY + "px"
+    wall.style.right = wallPosX + "px"
 }
 
 function wallremove() {
