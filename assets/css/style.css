@@ -18,6 +18,7 @@ p {
     height: 800px;
     border: solid white 2px;
     position:relative;
+    border-radius: 10px;
 }
 
 .snake-head {
@@ -35,7 +36,7 @@ p {
 
 .wall {
     background-image: url(../image/Brick.png);
-    background-size: cover;
+    background-size: contain;
     width: 40px;
     height: 40px;
     text-align: center;
@@ -53,6 +54,7 @@ p {
     color: red;
     border-radius: 100px;
     position: absolute;
+    border-radius: 50px;
 }
 
 button {
@@ -87,4 +89,25 @@ h1:hover {
     color: red;
     font-size: 65px;
     transition:0.5s;
+}
+
+.gameover {
+    color:red;
+    position: absolute;
+    top:280px;
+    left:185px;
+    font-size: 5em;
+    display:none;
+}
+
+.fapple {
+    width: 45px;
+    height: 45px;
+    background-image: url(../image/fapple.png);
+    background-size:100%;
+    text-align: center;
+    color: blue;
+    border-radius: 100px;
+    position: absolute;
+    border-radius: 50px;
 }

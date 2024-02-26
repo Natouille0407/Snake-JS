@@ -3,28 +3,29 @@ let i = 0;
 let gameInterval;
 let snakeSegments = [];
 let gamearea = document.querySelector(".gameArea");
+let speed = 20;
 
 function moveUp(snakeHead) {
     let currentPosition = parseFloat(getComputedStyle(snakeHead).top);
-    snakeHead.style.top = currentPosition - 20 + "px";
+    snakeHead.style.top = currentPosition - speed + "px";
     snakeHead.style.rotate = 0 + "deg";
 }
 
 function moveDown(snakeHead) {
     let currentPosition = parseFloat(getComputedStyle(snakeHead).top);
-    snakeHead.style.top = currentPosition + 20 + "px";
+    snakeHead.style.top = currentPosition + speed + "px";
     snakeHead.style.rotate = 180 + "deg";
 }
 
 function moveLeft(snakeHead) {
     let currentPosition = parseFloat(getComputedStyle(snakeHead).left);
-    snakeHead.style.left = currentPosition - 20 + "px";
+    snakeHead.style.left = currentPosition - speed + "px";
     snakeHead.style.rotate = -90 + "deg";
 }
 
 function moveRight(snakeHead) {
     let currentPosition = parseFloat(getComputedStyle(snakeHead).left);
-    snakeHead.style.left = currentPosition + 20 + "px";
+    snakeHead.style.left = currentPosition + speed + "px";
     snakeHead.style.rotate = 90 + "deg";
 }
 
@@ -46,6 +47,7 @@ function moveSnake() {
     }
 
     checkBoundaries();
+    detectWallCollision();
 
     for (let i = snakeSegments.length - 1; i > 0; i--) {
         let currentSegment = snakeSegments[i];
@@ -61,28 +63,51 @@ function moveSnake() {
     }
 }
 
+function detectWallCollision() {
+    let snakeHead = document.querySelector(".snake-head").getBoundingClientRect();
+    let walls = document.querySelectorAll('.wall');
+
+    for (let i = 0; i < walls.length; i++) {
+        let wallRect = walls[i].getBoundingClientRect();
+
+        if (
+            snakeHead.left < wallRect.right &&
+            snakeHead.right > wallRect.left &&
+            snakeHead.top < wallRect.bottom &&
+            snakeHead.bottom > wallRect.top
+        ) {
+            handleDeath();
+            break;
+        }
+    }
+}
+
 
 function checkBoundaries() {
     let snakeHead = document.querySelector(".snake-head");
     let gameArea = document.querySelector(".gameArea");
-    
+
     let headRect = snakeHead.getBoundingClientRect();
     let areaRect = gameArea.getBoundingClientRect();
 
     if (headRect.left < areaRect.left - 3) {
-        snakeHead.style.left = areaRect.left - 300 + "px";
+        snakeHead.style.left = areaRect.left - 480 + "px";
+        handleDeath();
     }
 
     if (headRect.right > areaRect.right) {
-        snakeHead.style.left = (areaRect.right - snakeHead.offsetWidth - 320) + "px";
+        snakeHead.style.left = (areaRect.right - snakeHead.offsetWidth - 495) + "px";
+        handleDeath();
     }
 
-    if (headRect.top < areaRect.top ) {
+    if (headRect.top < areaRect.top) {
         snakeHead.style.top = areaRect.top + "px";
+        handleDeath();
     }
 
     if (headRect.bottom > areaRect.bottom) {
         snakeHead.style.top = (areaRect.bottom - snakeHead.offsetHeight - 20) + "px";
+        handleDeath();
     }
 }
 
@@ -113,8 +138,8 @@ function appleRandomSpawn() {
     let applePosX = Math.floor(Math.random() * (760 + 1));
     document.getElementById('pomme').style.top = applePosY + "px";
     document.getElementById('pomme').style.left = applePosX + "px";
-    
-    if(checkAppleWallCollision()) {
+
+    if (checkAppleWallCollision()) {
         appleRandomSpawn()
     }
 }
@@ -152,7 +177,7 @@ function checkAppleWallCollision() {
             pommeRect.left < wallRect.right &&
             pommeRect.right > wallRect.left
         ) {
-            
+
             return true;
         }
     }
@@ -178,10 +203,10 @@ function avoidWallOverlap() {
 function checkCollisionWithWalls(posX, posY) {
     let pommeRect = document.getElementById('pomme').getBoundingClientRect();
     let walls = document.querySelectorAll('.wall');
-    
+
     for (let i = 0; i < walls.length; i++) {
         let wallRect = walls[i].getBoundingClientRect();
-        
+
         if (
             posY < wallRect.bottom &&
             posY + 30 > wallRect.top &&
@@ -191,7 +216,7 @@ function checkCollisionWithWalls(posX, posY) {
             return true;
         }
     }
-    
+
     return false;
 }
 
@@ -218,6 +243,7 @@ function detectCollision() {
         snakeHead.top < apple.bottom &&
         snakeHead.bottom > apple.top
     ) {
+        falseAppleSpawn()
         appleRandomSpawn();
         scoreIncrement();
         wallRandomSpawn();
@@ -227,9 +253,108 @@ function detectCollision() {
     }
 }
 
+function falseAppleSpawn() {
+    let = randomNumber = Math.floor(Math.random() * 3) + 1;
+
+    if (randomNumber === 1) {
+        let fApplePosY = Math.floor(Math.random() * (760 + 1));
+        let fApplePosX = Math.floor(Math.random() * (760 + 1));
+        let fApple = document.createElement('div');
+        gamearea.appendChild(fApple);
+        fApple.classList.add('fapple');
+
+        fApple.style.top = fApplePosY + "px";
+        fApple.style.left = fApplePosX + "px";
+
+        console.log("fapple");
+    }
+}
+
+function detectFappleCollision() {
+    let snakeHead = document.querySelector(".snake-head").getBoundingClientRect();
+    let fapples = document.querySelectorAll('.fapple');
+
+    for (let i = 0; i < fapples.length; i++) {
+        let fappleRect = fapples[i].getBoundingClientRect();
+
+        if (
+            snakeHead.left < fappleRect.right &&
+            snakeHead.right > fappleRect.left &&
+            snakeHead.top < fappleRect.bottom &&
+            snakeHead.bottom > fappleRect.top
+        ) {
+            handleFappleCollision(fapples[i]);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function handleFappleCollision(fapple) {
+    fapple.remove();
+    randomEffect()
+}
+
+function fappleremove() {
+    let fapples = document.querySelectorAll(".fapple");
+    for (let i = 0; i < fapples.length; i++) {
+        fapples[i].remove();
+    }
+}
+
+function randomEffect() {
+    let randomEffect = Math.floor(Math.random() * 3) + 1;
+
+    if (randomEffect === 1) {
+        console.log("5 Walls spawn");
+
+        wallRandomSpawn()
+        wallRandomSpawn()
+        wallRandomSpawn()
+        wallRandomSpawn()
+        wallRandomSpawn()
+    }
+
+    else if (randomEffect === 2) {
+        console.log("apple random tp");
+
+        let intervalId;
+        function startSpawn() {
+            intervalId = setInterval(appleRandomSpawn, 500);
+        }
+        function stopSpawn() {
+            clearInterval(intervalId);
+        }
+        startSpawn();
+        setTimeout(stopSpawn, 10000);
+    }
+
+    else if (randomEffect === 3) {
+        console.log("add speed");
+
+        function addspeed() {
+            speed + 20;
+        }
+    }
+}
+
+function handleDeath() {
+    let gameoverElements = document.querySelectorAll('.gameover');
+    gameoverElements.forEach(function (element) {
+        element.style.display = 'block';
+    });
+    stopGame();
+}
+
 function startGame() {
+    let gameoverElements = document.querySelectorAll('.gameover');
+    gameoverElements.forEach(function (element) {
+        element.style.display = 'none';
+    });
     gameInterval = setInterval(function () {
         moveSnake();
+        detectFappleCollision()
         if (detectCollision()) {
             console.log("Collision détectée !");
         }
@@ -238,10 +363,12 @@ function startGame() {
 
 function stopGame() {
     wallremove()
+    fappleremove()
     clearInterval(gameInterval);
     document.querySelector('.snake-head').style.left = '385px';
     document.querySelector('.snake-head').style.top = '385px';
     document.querySelector('#score').textContent = 0;
+    i = 0;
 }
 
 document.addEventListener("keydown", handleDirectionChange);
