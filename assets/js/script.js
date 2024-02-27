@@ -1,5 +1,5 @@
 let snakeDirection = "right";
-let i = 0;
+let score = 0;
 let gameInterval;
 let snakeSegments = [];
 let gamearea = document.querySelector(".gameArea");
@@ -82,6 +82,13 @@ function detectWallCollision() {
     }
 }
 
+function removeLastWall() {
+    let walls = document.querySelectorAll(".wall");
+    if (walls.length > 0) {
+        let lastWall = walls[walls.length - 1];
+        lastWall.remove();
+    }
+}
 
 function checkBoundaries() {
     let snakeHead = document.querySelector(".snake-head");
@@ -229,8 +236,25 @@ function createWallAtPosition(posX, posY) {
 }
 
 function scoreIncrement() {
-    i++
-    document.querySelector('#score').textContent = i;
+    score++
+    document.querySelector('#score').textContent = score;
+    easterEgg()
+}
+
+function easterEgg() {
+    if (score % 17 === 0) {
+        const snakeHeads = document.querySelectorAll('.snake-head');
+        snakeHeads.forEach(head => {
+            head.style.backgroundImage = "url(assets/image/player-2.png)";
+        });
+    }
+
+    else {
+        const snakeHeads = document.querySelectorAll('.snake-head');
+        snakeHeads.forEach(head => {
+            head.style.backgroundImage = "url(assets/image/player.png)";
+        });
+    }
 }
 
 function detectCollision() {
@@ -248,13 +272,12 @@ function detectCollision() {
         scoreIncrement();
         wallRandomSpawn();
         return true;
-    } else {
-        return false;
     }
+    return false
 }
 
 function falseAppleSpawn() {
-    let = randomNumber = Math.floor(Math.random() * 3) + 1;
+    let randomNumber = Math.floor(Math.random() * 3) + 1;
 
     if (randomNumber === 1) {
         let fApplePosY = Math.floor(Math.random() * (760 + 1));
@@ -303,8 +326,26 @@ function fappleremove() {
     }
 }
 
+function addspeed() {
+    speed = speed + 5;
+    console.log(speed);
+}
+
+function reducespeed() {
+    speed = speed - 5;
+    console.log(speed);
+}
+
+function starSpawn() {
+    let starElements = document.querySelectorAll('.star');
+    starElements.forEach(function (element) {
+        element.style.display = 'block';
+    });
+}
+
 function randomEffect() {
-    let randomEffect = Math.floor(Math.random() * 3) + 1;
+
+    let randomEffect = Math.floor(Math.random() * 6) + 1;
 
     if (randomEffect === 1) {
         console.log("5 Walls spawn");
@@ -332,11 +373,26 @@ function randomEffect() {
 
     else if (randomEffect === 3) {
         console.log("add speed");
-
-        function addspeed() {
-            speed + 20;
-        }
+        addspeed()
     }
+
+    if (randomEffect === 4) {
+        console.log("remove 1 wall")
+        removeLastWall()
+    }
+
+    else if (randomEffect === 5) {
+        console.log("spawn 3 fapple")
+        falseAppleSpawn()
+        falseAppleSpawn()
+        falseAppleSpawn()
+    }
+
+    else if (randomEffect === 6) {
+        console.log("reduce speed")
+        reducespeed()
+    }
+
 }
 
 function handleDeath() {
@@ -345,6 +401,60 @@ function handleDeath() {
         element.style.display = 'block';
     });
     stopGame();
+}
+
+function debugSpawnFapple() {
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
+    falseAppleSpawn()
 }
 
 function startGame() {
@@ -365,6 +475,7 @@ function stopGame() {
     wallremove()
     fappleremove()
     clearInterval(gameInterval);
+    speed = 20;
     document.querySelector('.snake-head').style.left = '385px';
     document.querySelector('.snake-head').style.top = '385px';
     document.querySelector('#score').textContent = 0;
