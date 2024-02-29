@@ -18,7 +18,7 @@ p {
     height: 800px;
     border: solid white 2px;
     position:relative;
-    border-radius: 10px;
+    border-radius: 20px;
     background-image: url(../image/grass.png);
 }
 
@@ -34,6 +34,7 @@ p {
     color: lime;
     border-radius: 15px;
     position: absolute;
+
 }
 
 .wall {
@@ -45,6 +46,7 @@ p {
     color: red;
     border-radius: 5px;
     position: absolute;
+    background-color: red;
 }
 
 #pomme {
@@ -69,14 +71,15 @@ button {
     margin-left: 10px;
     color: white;
     background-color: black;
-    border-color: aquamarine;
     transition:0.5s;
+    box-shadow: none;
 }
 
 button:hover {
     height: 60px;
     transition:0.5s;
     border-color:red;
+    border-radius: 30px;
 }
 
 h1 {
@@ -114,4 +117,16 @@ h1:hover {
     border-radius: 100px;
     position: absolute;
     border-radius: 50px;
+}
+
+.fappleimg {
+    width: 1px;
+    height: 1px;
+    position: absolute;
+}
+
+input {
+    position: absolute;
+    top:170px;
+    left:1215px;
 }
