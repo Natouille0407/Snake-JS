@@ -618,6 +618,9 @@ function stopGame() {
     document.querySelector('.snake-head').style.top = '385px';
     document.querySelector('#score').textContent = 0;
     i = 0;
+    setTimeout(() => {
+        location.reload();
+    }, 3000);
 }
 
 // Événement de changement de direction avec les touches du clavier
