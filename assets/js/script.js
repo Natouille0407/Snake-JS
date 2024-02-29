@@ -619,7 +619,7 @@ function stopGame() {
     document.querySelector('#score').textContent = 0;
     i = 0;
     setTimeout(() => {
-        location.reload();
+        window.location.reload(true);
     }, 3000);
 }
 
