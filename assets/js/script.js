@@ -343,7 +343,7 @@ function resetScore() {
 
 // Fonction de gestion de l'easter egg
 function easterEgg() {
-    if (score % 17 === 0) {
+    if (score === 17) {
         const snakeHeads = document.querySelectorAll('.snake-head');
         snakeHeads.forEach(head => {
             head.style.backgroundImage = "url(assets/image/player-2.png)";
@@ -620,7 +620,7 @@ function stopGame() {
     i = 0;
     setTimeout(() => {
         window.location.reload(true);
-    }, 3000);
+    }, 1000);
 }
 
 // Événement de changement de direction avec les touches du clavier
